@@ -1,0 +1,424 @@
+-------- 20 SQL CÜMLESÝ
+-------1
+
+SELECT Havayolu.HavayoluAdi, Havalimani.HavalimaniAdi, Havalimani.Sehir
+FROM Havayolu
+JOIN Ucak ON Havayolu.HavayoluID = Ucak.HavayoluID
+JOIN Calisan ON Ucak.CalisanID = Calisan.CalisanID
+JOIN Havalimani ON Havalimani.HavalimaniID = Calisan.CalisanID;
+
+-------2
+SELECT Calisan.Ad, Calisan.Soyad, Ucus.UcusNumarasi, Ucus.KalkisZamani, Ucus.VarisZamani
+FROM Calisan
+JOIN Ucak ON Calisan.CalisanID = Ucak.CalisanID
+JOIN Ucus ON Ucak.UcakID = Ucus.UcusID
+WHERE Calisan.Pozisyon = 'Hostes';
+
+-------3
+SELECT UcusNumarasi, KalkisZamani, VarisZamani
+FROM Ucus
+WHERE KalkisZamani BETWEEN '2024-01-17 00:00:00' AND '2024-01-18 00:00:00';
+
+-------4
+SELECT KoltukNumarasi, Fiyat
+FROM Koltuk
+WHERE KoltukSinifi = 'Economy';
+
+-------5
+SELECT Yolcu.Ad, Yolcu.Soyad, Bagaj.Agirlik, Bagaj.Fiyat
+FROM Yolcu
+JOIN Bagaj ON Yolcu.YolcuID = Bagaj.YolcuID;
+
+-------6
+SELECT DISTINCT Havayolu.HavayoluAdi, Ucak.UcakModel
+FROM Havayolu
+JOIN Ucak ON Havayolu.HavayoluID = Ucak.HavayoluID
+WHERE Ucak.UcakModel = '737-800';
+
+--------7
+SELECT Havayolu.HavayoluAdi, Ucus.UcusNumarasi, Ucus.KalkisZamani, Ucus.VarisZamani
+FROM Havayolu
+JOIN Ucus ON Havayolu.HavayoluID = Ucus.HavayoluID
+WHERE Havayolu.HavayoluAdi = 'Turkish Airlines';
+
+--------8
+SELECT Ucus.UcusNumarasi, Ucus.KalkisZamani, Ucus.VarisZamani
+FROM Ucak
+JOIN Ucus ON Ucak.UcakID = Ucus.UcusID
+WHERE Ucak.UcakModel = 'A320neo';
+
+--------9
+SELECT AVG(Maas) AS Hostes_Maas_Ortalamasi
+FROM Calisan
+WHERE Pozisyon = 'Hostes';
+
+--------10
+SELECT KoltukNumarasi, KoltukSinifi, Fiyat
+FROM Koltuk
+WHERE UcusID IN (SELECT UcusID FROM Ucus WHERE UcusNumarasi = 123);
+
+--------11
+SELECT RezervasyonID, YolcuID, UcusID, BiletID, RezervasyonTarihi
+FROM Rezervasyon
+WHERE RezervasyonTarihi BETWEEN '2024-01-16 00:00:00' AND '2024-01-17 00:00:00';
+
+--------12
+SELECT HavalimaniAdi, UcusNumarasi, KalkisZamani, VarisZamani
+FROM Havalimani
+JOIN Ucus ON Havalimani.HavalimaniID = Ucus.VarisHavalimaniID
+WHERE Havalimani.Sehir = 'Ýstanbul';
+
+--------13
+SELECT Havayolu.HavayoluAdi, Ucus.UcusNumarasi, Ucak.UcakModel
+FROM Havayolu
+JOIN Ucus ON Havayolu.HavayoluID = Ucus.HavayoluID
+JOIN Ucak ON Ucus.UcusID = Ucak.UcakID
+WHERE Havayolu.HavayoluAdi = 'Turkish Airlines';
+
+--------14
+SELECT TOP 1 KoltukNumarasi, KoltukSinifi, Fiyat
+FROM Koltuk
+ORDER BY Fiyat DESC;
+
+--------15
+SELECT COUNT(*) AS Ucus_Sayisi
+FROM Ucus
+WHERE KalkisZamani >= '2024-01-17 00:00:00' AND VarisZamani <= '2024-01-17 23:59:59';
+
+-------16
+SELECT DISTINCT Ucak.UcakModel
+FROM Calisan
+JOIN Ucak ON Calisan.CalisanID = Ucak.CalisanID
+JOIN Ucus ON Ucak.UcakID = Ucus.UcusID
+WHERE Calisan.Pozisyon = 'Hostes';
+
+--------17
+
+SELECT SUM(Fiyat) AS Toplam_Bilet_Fiyati
+FROM Koltuk
+WHERE KoltukSinifi = 'Economy';
+
+--------18
+SELECT HavalimaniAdi, UcusNumarasi, KalkisZamani, VarisZamani
+FROM Havalimani
+JOIN Ucus ON Havalimani.HavalimaniID = Ucus.KalkisHavalimaniID
+WHERE Havalimani.Sehir = 'Ýstanbul';
+
+---------19
+SELECT Havayolu.HavayoluAdi, COUNT(Ucus.UcusID) AS Ucus_Sayisi
+FROM Havayolu
+JOIN Ucus ON Havayolu.HavayoluID = Ucus.HavayoluID
+GROUP BY Havayolu.HavayoluAdi;
+
+---------20
+SELECT Rezervasyon.RezervasyonID, Yolcu.Ad, Yolcu.Soyad, Ucus.UcusNumarasi, Ucus.KalkisZamani, Ucus.VarisZamani
+FROM Rezervasyon
+JOIN Yolcu ON Rezervasyon.YolcuID = Yolcu.YolcuID
+JOIN Ucus ON Rezervasyon.UcusID = Ucus.UcusID
+WHERE Rezervasyon.RezervasyonTarihi BETWEEN '2024-01-16 00:00:00' AND '2024-01-17 00:00:00';
+
+
+---------------------------------------------------------------------------------
+--INSERT 
+--1
+SELECT * FROM Calisan
+INSERT INTO Calisan (Ad, Soyad, Pozisyon, Maas)
+VALUES ('Memati', 'Öze', 'Temizlik', 1000.00);
+SELECT * FROM Calisan
+--2
+
+SELECT * FROM Yolcu
+INSERT INTO Yolcu (Ad, Soyad, Cinsiyet, Telefon, TcNumaraPasaport)
+VALUES ('Ebu', 'Sýddýk', 'M', '5233654789', 12547456750);
+SELECT * FROM Yolcu
+--3
+
+SELECT * FROM Ucak
+INSERT INTO Ucak (HavayoluID, CalisanID, UcakAdi, UcakModel, Kapasite)
+VALUES (3, 4, 'Boeing 731', '731-211', 120);
+SELECT * FROM Ucak
+
+--4
+SELECT * FROM Bagaj
+INSERT INTO Bagaj (YolcuID, Agirlik, Fiyat)
+VALUES (3, '10kg', 35.00);
+SELECT * FROM Bagaj
+--5
+
+SELECT * FROM Havalimani
+INSERT INTO Havalimani (HavalimaniAdi, Sehir, Ulke, IATAKodu)
+VALUES ('Sabiha Havalimaný', 'Ýstanbul','Türkiye', 'IST');
+SELECT * FROM Havalimani
+
+--------------------------------------------------------------------
+--UPDATE
+
+--1
+SELECT * FROM Yolcu
+UPDATE Yolcu
+SET Telefon = '5148546258'
+WHERE YolcuID = 1;
+SELECT * FROM Yolcu
+
+--2
+SELECT * FROM Calisan
+UPDATE Calisan
+SET Maas = 6000.00
+WHERE CalisanID = 2;
+SELECT * FROM Calisan
+
+--3
+SELECT * FROM Bagaj
+UPDATE Bagaj
+SET Agirlik = '12kg'
+WHERE YolcuID = 2;
+SELECT * FROM Bagaj
+
+--4
+SELECT * FROM Ucak
+UPDATE Ucak
+SET UcakAdi = 'Bay A320'
+WHERE UcakID = 2;
+SELECT * FROM Ucak
+
+--5
+SELECT * FROM Koltuk
+UPDATE Koltuk
+SET KoltukSinifi = 'First Class', Fiyat = 1000.00
+WHERE KoltukID = 2;
+SELECT * FROM Koltuk
+
+------ --------------------------------------------------------------------
+--DELETE
+
+--1
+SELECT * FROM Havalimani
+DELETE FROM Havalimani
+WHERE HavalimaniID = 4;
+SELECT * FROM Havalimani
+
+--2
+SELECT * FROM Ucak
+DELETE FROM Ucak
+WHERE UcakModel = '737-800';
+SELECT * FROM Ucak
+
+
+
+---------------------------------------------------------------------------------
+--ALTER
+
+CREATE TABLE Ucus (
+    UcusID INT PRIMARY KEY IDENTITY (1,1),
+    HavayoluID TINYINT,
+    KalkisHavalimaniID TINYINT NOT NULL,
+    VarisHavalimaniID TINYINT NOT NULL,
+    UcusNumarasi INT NOT NULL,
+    KalkisZamani SMALLDATETIME NOT NULL,
+    VarisZamani SMALLDATETIME NOT NULL,
+    FOREIGN KEY (HavayoluID) REFERENCES Havayolu(HavayoluID),
+    FOREIGN KEY (KalkisHavalimaniID) REFERENCES Havalimani(HavalimaniID),
+    FOREIGN KEY (VarisHavalimaniID) REFERENCES Havalimani(HavalimaniID)
+);
+
+----1
+SELECT * FROM Ucus
+ALTER TABLE Ucus
+ADD UcakID INT;
+SELECT * FROM Ucus
+
+----2
+SELECT * FROM Ucus
+ALTER TABLE Ucus
+DROP COLUMN UcusNumarasi;
+SELECT * FROM Ucus
+
+----3
+SELECT * FROM Ucus
+ALTER TABLE Ucus
+ADD FOREIGN KEY (UcakID) REFERENCES Ucak(UcakID);
+SELECT * FROM Ucus
+
+
+CREATE TABLE Havalimani (
+    HavalimaniID TINYINT PRIMARY KEY IDENTITY (1,1),
+    HavalimaniAdi NVARCHAR(37) NOT NULL,
+    Sehir NVARCHAR(58) NOT NULL,
+    Ulke NVARCHAR(36) NOT NULL,
+    IATAKodu VARCHAR(3) NOT NULL
+);
+
+----4
+SELECT * FROM Havalimani
+ALTER TABLE Havalimani
+ADD HavalimaniTipi NVARCHAR(20);
+SELECT * FROM Havalimani
+
+----5
+SELECT * FROM Havalimani
+ALTER TABLE Havalimani
+DROP COLUMN HavalimaniTipi;
+SELECT * FROM Havalimani
+
+
+
+----------------------------------------------------------------
+--VIEW'LAR
+----1
+CREATE VIEW Vw_UcusBilgileri AS
+SELECT U.UcusID, H.HavayoluAdi, KH.HavalimaniAdi AS KalkisHavalimani, VH.HavalimaniAdi AS VarisHavalimani, U.KalkisZamani, U.VarisZamani
+FROM Ucus U
+INNER JOIN Havayolu H ON U.HavayoluID = H.HavayoluID
+INNER JOIN Havalimani KH ON U.KalkisHavalimaniID = KH.HavalimaniID
+INNER JOIN Havalimani VH ON U.VarisHavalimaniID = VH.HavalimaniID;
+
+SELECT * FROM Vw_UcusBilgileri
+
+----2
+CREATE VIEW Vw_YolcuBilet AS
+SELECT Y.YolcuID, Y.Ad, Y.Soyad, B.BiletID, B.BiletNo, B.KalkisTarihi, B.VarisTarihi
+FROM Yolcu Y
+INNER JOIN Bilet B ON Y.YolcuID = B.YolcuID;
+SELECT  * FROM Vw_YolcuBilet
+
+
+----3
+CREATE VIEW Vw_UcakHavayolu AS
+SELECT U.UcakID, U.UcakAdi, U.UcakModel, H.HavayoluAdi
+FROM Ucak U
+INNER JOIN Havayolu H ON U.HavayoluID = H.HavayoluID;
+SELECT * FROM Vw_UcakHavayolu
+
+
+----4
+CREATE VIEW Vw_EnCokSatilanKoltukSiniflari AS
+SELECT KoltukSinifi, COUNT(*) AS ToplamSatilanKoltuk, SUM(Fiyat) AS ToplamGelir
+FROM Koltuk
+GROUP BY KoltukSinifi;
+SELECT * FROM Vw_EnCokSatilanKoltukSiniflari 
+
+
+-----5
+CREATE VIEW Vw_GecikmisUcuslar AS
+SELECT U.UcusID, U.KalkisZamani, U.VarisZamani, H.HavalimaniAdi AS KalkisHavalimani, VH.HavalimaniAdi AS VarisHavalimani
+FROM Ucus U
+INNER JOIN Havalimani H ON U.KalkisHavalimaniID = H.HavalimaniID
+INNER JOIN Havalimani VH ON U.VarisHavalimaniID = VH.HavalimaniID
+WHERE U.VarisZamani > DATEADD(MINUTE, 30, U.KalkisZamani);
+SELECT * FROM Vw_GecikmisUcuslar
+
+
+
+-----------------------------------------------------------------------------------------------------
+---5 INDEX
+
+
+----1
+CREATE INDEX idx_YolcuID ON Bagaj (YolcuID);
+----2
+CREATE INDEX idx_KalkisHavalimani ON Ucus (KalkisHavalimaniID);
+----3
+CREATE INDEX idx_VarisHavalimani ON Ucus (VarisHavalimaniID);
+----4
+CREATE INDEX idx_YolcuSoyadi ON Yolcu (Soyad);
+----5
+CREATE INDEX idx_BiletKalkisTarihi ON Bilet (KalkisTarihi);
+
+
+-------------------------------------------------------------------------------------------------------------
+--TRANSACTION
+
+
+
+CREATE PROC Proje2
+AS
+SELECT * FROM Yolcu
+UPDATE Yolcu SET Ad='Ayþe' WHERE Telefon='5559876543'
+SAVE TRANSACTION SP1
+INSERT INTO Yolcu(Ad, Soyad, Cinsiyet, Telefon, TcNumaraPasaport)
+VALUES ('Nihat', 'Cem', 'M', '5126452315', 69874511135)
+DELETE FROM Yolcu WHERE Soyad='Kaya'
+SAVE TRANSACTION SP2
+ROLLBACK TRANSACTION  SP1
+INSERT INTO Yolcu(Ad, Soyad, Cinsiyet, Telefon, TcNumaraPasaport)
+VALUES ('Cemre', 'Ayla', 'F', '5165422215', 31261586432)
+COMMIT
+SELECT * FROM Yolcu
+EXEC Proje2
+
+
+
+-------------------------------------------------------------------------------------
+--TRIGGER
+
+CREATE TRIGGER trg_Ucus_InsertUpdate
+ON Ucus
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Ýlgili log tablosuna ekleme yap
+    INSERT INTO UcusLog (UcusID, IslemTipi, IslemZamani)
+    SELECT UcusID, 
+           CASE 
+               WHEN EXISTS (SELECT 1 FROM inserted) AND NOT EXISTS (SELECT 1 FROM deleted) THEN 'INSERT'
+               WHEN EXISTS (SELECT 1 FROM inserted) AND EXISTS (SELECT 1 FROM deleted) THEN 'UPDATE'
+               ELSE NULL
+           END AS IslemTipi,
+           GETDATE() AS IslemZamani
+    FROM inserted;
+END;
+
+
+-----2
+CREATE TRIGGER trg_Bilet_Insert
+ON Bilet
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO BiletLog (BiletID, IslemTipi, IslemZamani)
+    SELECT BiletID, 'INSERT', GETDATE()
+    FROM inserted;
+END;
+
+
+
+--------------------------------------------------------------------------------------
+---PROCEDURE
+
+
+---1
+CREATE PROCEDURE UcusListele
+    @HavalimaniAdi NVARCHAR(37)
+AS
+BEGIN
+    SELECT U.UcusID, U.HavayoluID, U.KalkisHavalimaniID, U.VarisHavalimaniID, U.KalkisZamani, U.VarisZamani
+    FROM Ucus U
+    INNER JOIN Havalimani H ON U.KalkisHavalimaniID = H.HavalimaniID
+    WHERE H.HavalimaniAdi = @HavalimaniAdi;
+END;
+ 
+
+
+
+---2
+CREATE PROCEDURE sp_EkleBilet
+    @BiletNo INT,
+    @YolcuID INT,
+    @UcusID INT,
+    @KoltukID INT,
+    @HavayoluID TINYINT,
+    @KalkisTarihi SMALLDATETIME,
+    @VarisTarihi SMALLDATETIME
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Yeni bilet eklemek için INSERT iþlemi
+    INSERT INTO Bilet (BiletNo, YolcuID, UcusID, KoltukID, HavayoluID, KalkisTarihi, VarisTarihi)
+    VALUES (@BiletNo, @YolcuID, @UcusID, @KoltukID, @HavayoluID, @KalkisTarihi, @VarisTarihi);
+END;
+-----------------------------------------------------------------------------------------
